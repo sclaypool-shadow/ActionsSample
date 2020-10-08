@@ -1,12 +1,11 @@
 name: CI RSpec Tests
 
-on: [push, pull_request]
+on:
   push:
-   paths:
-   - 'app/**'
+    branches-ignore: [main]
+    # Remove the line above to run when pushing to main
   pull_request:
-    paths:
-    - 'app/**'
+    branches: [main]
 
 jobs:
   build:
@@ -32,7 +31,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-ruby@v1
         with:
-          ruby-version: 2.6.5
+          ruby-version: '2.6.5'
 
       - name: Install PostgreSQL
         run: sudo apt-get -yqq install libpq-dev

@@ -3,6 +3,8 @@ EXPECTED=$1
 [[ -z $EXPECTED ]] && EXPECTED=6000
 
 OUTPUT=$(rubocop -P | tail -1)
+echo "$OUTPUT"
+
 regex='([0-9]+) files inspected, ([0-9]+) offenses detected'
 
 [[ $OUTPUT =~ $regex ]]
@@ -13,6 +15,7 @@ if ((OFFENSES > EXPECTED)); then
   echo "Rubocop failed: Found $OFFENSES, expected $EXPECTED"
   exit 1
 fi
+
 
 echo "Rubocop passed!"
 exit 0

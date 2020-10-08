@@ -12,6 +12,7 @@ jobs:
     name: CI
     runs-on: ubuntu-latest
     env:
+      expected-rubocop-errors: 1
       app-dir: ./app 
 
     steps:
@@ -27,4 +28,4 @@ jobs:
 
       - name: Check rubocop
         working-directory: ${{env.app-dir}}
-        run: ../.github/scripts/check_rubocop.sh 0
+        run: ../.github/scripts/check_rubocop.sh ${{env.expected-rubocop-errors}}

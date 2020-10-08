@@ -1,11 +1,11 @@
 #!/bin/bash
 EXPECTED=$1
-[[ -z $EXPECTED ]] && EXPECTED=6000
+[[ -z $EXPECTED ]] && EXPECTED=0
 
 OUTPUT=$(rubocop -P | tail -1)
 echo "$OUTPUT"
 
-regex='([0-9]+) files inspected, ([0-9]+) offenses detected'
+regex='([0-9]+) file.* inspected, ([0-9]+) offense.* detected'
 
 [[ $OUTPUT =~ $regex ]]
 
@@ -17,5 +17,5 @@ if ((OFFENSES > EXPECTED)); then
 fi
 
 
-echo "Rubocop passed!"
+echo "Rubocop passed! only $OFFENSES Errors (Less than $EXPECTED errors)"
 exit 0

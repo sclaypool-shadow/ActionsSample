@@ -1,4 +1,4 @@
-name: CI RSpec Tests
+name: Rubocop Tests
 
 on:
   push:

@@ -51,4 +51,4 @@ jobs:
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_RUBY: true
-          RUBY_CONFIG_FILE: .rubocop.yml
+          RUBY_CONFIG_FILE: app/.rubocop.yml

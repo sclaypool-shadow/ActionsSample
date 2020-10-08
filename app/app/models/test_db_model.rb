@@ -1,0 +1,2 @@
+class TestDbModel < ApplicationRecord
+end

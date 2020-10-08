@@ -27,4 +27,4 @@ jobs:
 
       - name: Check rubocop
         working-directory: ${{env.app-dir}}
-        run: ../.github/scripts/check_rubocop.sh
+        run: ../.github/scripts/check_rubocop.sh 1

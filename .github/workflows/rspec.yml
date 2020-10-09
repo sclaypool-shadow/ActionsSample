@@ -1,0 +1,59 @@
+name: CI RSpec Tests
+
+on:
+  push:
+    branches-ignore: [main]
+    # Remove the line above to run when pushing to main
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+    env:
+      app-dir: ./app 
+
+    services:
+      postgres:
+        image: postgres:11.6
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+        image: redis
+        ports: ["6379:6379"]
+      elasticsearch:
+        image: elasticsearch:6.8.8
+        ports: ["9200:9200"]
+        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6.5
+
+      - name: Install PostgreSQL
+        run: sudo apt-get -yqq install libpq-dev
+
+      - name: Run bundle install
+        working-directory: ${{env.app-dir}}
+        run: |
+          rm Gemfile.lock
+          gem install bundler
+          bundle install --jobs 4 --retry 3
+      - name: Setup Database
+        working-directory: ${{env.app-dir}}
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: postgres
+        run: bin/rails db:create db:schema:load db:migrate
+
+      - name: Build and test with rspec
+        working-directory: ${{env.app-dir}}
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: postgres
+        run: bundle exec rspec spec

@@ -1,0 +1,30 @@
+name: Rubocop Tests
+
+on:
+  push:
+    branches-ignore: [main]
+    # Remove the line above to run when pushing to main
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: CI
+    runs-on: ubuntu-latest
+    env:
+      app-dir: ./app 
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.6.5
+
+      - name: Install rubocop
+        working-directory: ${{env.app-dir}}
+        run: |
+          gem install rubocop -v 0.80.1
+
+      - name: Check rubocop
+        working-directory: ${{env.app-dir}}
+        run: ../.github/scripts/check_rubocop.sh ${{secrets.ExpectedRubocopErrors}}
